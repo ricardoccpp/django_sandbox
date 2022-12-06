@@ -1,0 +1,40 @@
+version: '3.7'
+
+
+services:
+  postgres_db:
+    image: postgres:15.1-alpine
+    restart: always
+    env_file: .env
+    ports:    # Set up ports exposed for other containers to connect to
+      - 5432:5432
+    networks:
+      - app-tier
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+
+  django_api:
+    build: ./app/
+    restart: on-failure
+    depends_on:
+      - postgres_db
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py createsuperuser \
+              --noinput \
+              --username $DJANGO_SUPERUSER_USERNAME \
+              --email $DJANGO_SUPERUSER_EMAIL &&
+             python manage.py runserver 0.0.0.0:8000
+             "
+
+    ports:
+      - 8000:8000
+    env_file: .env
+    networks:
+      - app-tier
+    volumes:
+      - ./app:/usr/src/app
+
+networks:
+  app-tier:
+    driver: bridge
