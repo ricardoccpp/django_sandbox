@@ -14,7 +14,7 @@ services:
       - ./database:/docker-entrypoint-initdb.d
 
   django_api:
-    build: ./app/
+    build: ./django_api/
     restart: on-failure
     depends_on:
       - postgres_db
