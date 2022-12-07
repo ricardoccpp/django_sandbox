@@ -1,0 +1,22 @@
+#/bin/bash!
+
+export DEBUG=True
+export SECRET_KEY='*******'
+export ALLOWED_HOSTS=*
+export DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
+
+# django superuser
+export DJANGO_SUPERUSER_PASSWORD=*****
+export DJANGO_SUPERUSER_EMAIL=example@example.com
+export DJANGO_SUPERUSER_USERNAME=user
+
+# django superuser
+DJANGO_SUPERUSER_PASSWORD=*****
+DJANGO_SUPERUSER_EMAIL=example@example.com
+DJANGO_SUPERUSER_USERNAME=user
+
+# postgres
+export POSTGRES_USER=user
+export POSTGRES_PASSWORD=*****
+export POSTGRES_DB=pg_db
+export POSTGRES_HOST=localhost

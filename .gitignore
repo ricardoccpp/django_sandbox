@@ -93,3 +93,6 @@ pids
 *.ntvs*
 *.njsproj
 *.sln
+
+# Local dev environment scripts
+local-dev-env.sh
