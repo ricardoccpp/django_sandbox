@@ -33,7 +33,7 @@ services:
     networks:
       - app-tier
     volumes:
-      - ./app:/usr/src/app
+      - ./django_api:/usr/src/app
 
 networks:
   app-tier:
