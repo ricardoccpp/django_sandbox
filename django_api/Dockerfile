@@ -28,7 +28,7 @@ COPY . .
 
 
 RUN cd $WORKDIR 
-RUN django-admin startproject django_api
+#RUN django-admin startproject django_api
 RUN cd /usr/src/app/django_api
 
 EXPOSE 8000
