@@ -2,7 +2,7 @@ version: '3.7'
 
 
 services:
-  postgres_db:
+  postgres-db:
     image: postgres:15.1-alpine
     restart: always
     env_file: .env
@@ -11,22 +11,24 @@ services:
     networks:
       - app-tier
     volumes:
-      - ./database:/docker-entrypoint-initdb.d
+      - ./database:/var/lib/postgresql/data
 
-  django_api:
+  # sh -c "python manage.py migrate &&
+  #            python manage.py createsuperuser \
+  #             --noinput \
+  #             --username $DJANGO_SUPERUSER_USERNAME \
+  #             --email $DJANGO_SUPERUSER_EMAIL &&
+  #            python manage.py runserver 0.0.0.0:8000
+  #            "
+  django-api:
     build: ./django_api/
     restart: on-failure
     depends_on:
-      - postgres_db
+      - postgres-db
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py createsuperuser \
-              --noinput \
-              --username $DJANGO_SUPERUSER_USERNAME \
-              --email $DJANGO_SUPERUSER_EMAIL &&
              python manage.py runserver 0.0.0.0:8000
              "
-
     ports:
       - 8000:8000
     env_file: .env
@@ -34,6 +36,24 @@ services:
       - app-tier
     volumes:
       - ./django_api:/usr/src/app
+
+  budibase:
+    restart: unless-stopped
+    image: budibase/budibase:latest
+    ports:
+      - 10000:80
+    environment:
+      JWT_SECRET: testsecret123
+      MINIO_ACCESS_KEY: budibase
+      MINIO_SECRET_KEY: budibase
+      REDIS_PASSWORD: budibase
+      COUCHDB_USER: budibase
+      COUCHDB_PASSWORD: budibase
+      INTERNAL_API_KEY: budibase
+    volumes:
+      - ./budibase_data:/data
+    networks:
+      - app-tier
 
 networks:
   app-tier:

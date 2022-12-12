@@ -95,4 +95,10 @@ pids
 *.sln
 
 # Local dev environment scripts
-local-dev-env.sh
+#local-dev-env.sh
+
+# DB mount volume
+database/
+
+# Testes
+*teste*.*
