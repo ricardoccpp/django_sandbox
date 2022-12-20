@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from web_api.views import AlunoViewSet
+from web_api.views import AtendidoViewSet, ResponsavelViewSet, EscolaViewSet, MatriculaViewSet
 
 router = routers.DefaultRouter()
-router.register('alunos', AlunoViewSet)
+router.register('escolas', EscolaViewSet)
+router.register('atendidos', AtendidoViewSet)
+router.register('responsaveis', ResponsavelViewSet)
+router.register('matriculas', MatriculaViewSet)
 
 
 urlpatterns = [

@@ -1,5 +1,6 @@
 version: '3.7'
 
+
 services:
   postgres-db:
     image: postgres:15.1-alpine
@@ -7,6 +8,8 @@ services:
     env_file: .env
     ports:    # Set up ports exposed for other containers to connect to
       - 5432:5432
+    networks:
+      - app-tier
     volumes:
       - ./database:/var/lib/postgresql/data
 
@@ -24,11 +27,13 @@ services:
       - postgres-db
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver_plus 0.0.0.0:8000 --cert-file /tmp/cert.crt
+             python manage.py runserver 0.0.0.0:8000
              "
     ports:
       - 8000:8000
     env_file: .env
+    networks:
+      - app-tier
     volumes:
       - ./django_api:/usr/src/app
 
@@ -47,3 +52,9 @@ services:
       INTERNAL_API_KEY: budibase
     volumes:
       - ./budibase_data:/data
+    networks:
+      - app-tier
+
+networks:
+  app-tier:
+    driver: bridge
